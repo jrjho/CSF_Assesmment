@@ -76,13 +76,13 @@ public class Archives {
 
     
     public JsonObject toJSON(){
-        JsonObjectBuilder builder = Json.createObjectBuilder()
+        return Json.createObjectBuilder()
                     .add("bundleId", getBundleId())
                     .add("name", getName())
                     .add("title", getTitle())
-                    .add("comments", getComments());
+                    .add("comments", getComments())
                     // .add("urls", getUrls())
-                    // .build();
+                    .build();
         
         // ls
 

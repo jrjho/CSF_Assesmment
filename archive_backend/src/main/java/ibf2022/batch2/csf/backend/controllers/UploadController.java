@@ -22,6 +22,7 @@ import ibf2022.batch2.csf.backend.models.Archives;
 import ibf2022.batch2.csf.backend.services.UploadService;
 import jakarta.json.Json;
 import jakarta.json.JsonArray;
+import jakarta.json.JsonArrayBuilder;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonReader;
 
@@ -67,23 +68,27 @@ public class UploadController {
         System.out.println("bundleId in controller: " + bundleId);
         List<Archives> results = uploadSvc.getInfoByBundleId(bundleId);
         System.out.println("results at controller: " + results);
-        String jsonStr = results.toString();
-        JsonReader reader = Json.createReader(new StringReader(jsonStr));
-        JsonObject jsonObj = reader.readObject();
-        JsonArray archive = jsonObj.getJsonArray("urls");
+        // String jsonStr = results.toString();
+        // JsonReader reader = Json.createReader(new StringReader(jsonStr));
+        // JsonObject jsonObj = reader.readObject();
+        // JsonArray archive = jsonObj.getJsonArray("urls");
 
-        System.out.println("archive at controller: " + archive);
+        // System.out.println("archive at controller: " + archive);
 
-        JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();
-        //append result to json array
-        for(Archives c: results)
-            jsonArrayBuilder.add(c.toJSON());
+        // JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();
+        // //append result to json array
+        // for(Archives c: results)
+        //     jsonArrayBuilder.add(c.toJSON());
+        
+        // // jsonArrayBuilder.add(archive);
+        // JsonArray result = jsonArrayBuilder.build();
+        // System.out.println("json to return: " + result.toString());
         
 
         // return null;?
         return ResponseEntity.status(HttpStatus.CREATED)
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(results);
+                             .body(results.toString());
 
         }
         catch(Exception e){
