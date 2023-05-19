@@ -3,7 +3,6 @@ package ibf2022.batch2.csf.backend.services;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 import org.bson.Document;
@@ -11,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import ibf2022.batch2.csf.backend.models.Archives;
 import ibf2022.batch2.csf.backend.repositories.ArchiveRepository;
 import ibf2022.batch2.csf.backend.repositories.ImageRepository;
 import jakarta.json.JsonObject;
@@ -38,8 +36,8 @@ public class UploadService {
         return bundleIdJson;
     }
 
-    public List<Archives> getInfoByBundleId(String bundleId){
-        List<Archives> results = archiveRepo.getBundleByBundleId(bundleId);
+    public Document getInfoByBundleId(String bundleId){
+        Document results = archiveRepo.getBundleByBundleId(bundleId);
         return results;
     }
 

@@ -1,7 +1,5 @@
 package ibf2022.batch2.csf.backend.repositories;
 
-import java.util.List;
-
 import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -9,7 +7,6 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
-import ibf2022.batch2.csf.backend.models.Archives;
 import ibf2022.batch2.csf.exception.Exceptions;
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
@@ -52,16 +49,17 @@ public class ArchiveRepository {
 	// Write the native mongo query that you will be using in this method
 	//
 	//
-	public List<Archives> getBundleByBundleId(String bundleId) {
+	public Document getBundleByBundleId(String bundleId) {
 		try{
 			Criteria criteria = Criteria.where("bundleId").is(bundleId);
 			Query query = Query.query(criteria);
 
-			List<Archives> bundle = mongoTemplate.find(query, Archives.class, COLLECTION_NAME);
-
-			System.out.println(">>> Get Bundle from Mongo: " + bundle.toString());
+			Document bundle = mongoTemplate.findOne(query, Document.class, COLLECTION_NAME);
+			// Document bundle2 = bundle.get(0);
+     
 
 			return bundle;
+			// return bundle;
 		}catch(Exception e){
 			throw new Exceptions("Get Bundle from Mongo failed!" + e.getMessage());
 		}

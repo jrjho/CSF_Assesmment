@@ -1,10 +1,10 @@
 package ibf2022.batch2.csf.backend.controllers;
 
 import java.io.IOException;
-import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -21,10 +21,9 @@ import org.springframework.web.multipart.MultipartFile;
 import ibf2022.batch2.csf.backend.models.Archives;
 import ibf2022.batch2.csf.backend.services.UploadService;
 import jakarta.json.Json;
-import jakarta.json.JsonArray;
 import jakarta.json.JsonArrayBuilder;
 import jakarta.json.JsonObject;
-import jakarta.json.JsonReader;
+import jakarta.json.JsonObjectBuilder;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -63,32 +62,15 @@ public class UploadController {
 	// TODO: Task 5
 	
     @GetMapping(path="/bundle/{bundleId}")
-    public ResponseEntity getInfoByBundleId(@PathVariable(required=true) String bundleId){
+    public ResponseEntity<String> getInfoByBundleId(@PathVariable(required=true) String bundleId){
         try{
         System.out.println("bundleId in controller: " + bundleId);
-        List<Archives> results = uploadSvc.getInfoByBundleId(bundleId);
+        Document results = uploadSvc.getInfoByBundleId(bundleId);
         System.out.println("results at controller: " + results);
-        // String jsonStr = results.toString();
-        // JsonReader reader = Json.createReader(new StringReader(jsonStr));
-        // JsonObject jsonObj = reader.readObject();
-        // JsonArray archive = jsonObj.getJsonArray("urls");
-
-        // System.out.println("archive at controller: " + archive);
-
-        // JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();
-        // //append result to json array
-        // for(Archives c: results)
-        //     jsonArrayBuilder.add(c.toJSON());
         
-        // // jsonArrayBuilder.add(archive);
-        // JsonArray result = jsonArrayBuilder.build();
-        // System.out.println("json to return: " + result.toString());
-        
-
-        // return null;?
-        return ResponseEntity.status(HttpStatus.CREATED)
+        return ResponseEntity.status(HttpStatus.OK)
                              .contentType(MediaType.APPLICATION_JSON)
-                             .body(results.toString());
+                             .body(results.toJson().toString());
 
         }
         catch(Exception e){
@@ -101,6 +83,33 @@ public class UploadController {
         }
         
     }
+
+    public static JsonObject toJson(List<Archives> archive) {
+        JsonObjectBuilder jsonObj = Json.createObjectBuilder();
+        JsonArrayBuilder jsonArray = Json.createArrayBuilder();
+
+
+        archive.stream().forEach(
+            v -> {
+                JsonObjectBuilder j = Json.createObjectBuilder();
+                j.add("title", v.getTitle())
+                .add("name", v.getName())
+                .add("comments", v.getComments())
+                .add("bundleId", v.getBundleId())
+                .add("date", v.getDate());
+                // .add("urls", v.getUrls());
+                // .add("reviewUrl", v.getReviewURL())
+                // .add("image", v.getImage())
+                // .add("commentCount", v.getCommentCount());
+                jsonArray.add(j);
+            }
+        );
+
+        jsonObj.add("jsonArray: ", jsonArray);
+
+        return jsonObj.build();
+    }
+
 
 	// TODO: Task 6
 
